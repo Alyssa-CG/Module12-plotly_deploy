@@ -17,17 +17,29 @@ function init() {
           .text(sample)
           .property("value", sample);
       });
+    buildMetadata(940);
+    buildCharts(940);
   })}
   
+  
+
   init();
 
-// This function is declared in plots.js, but it is never called in plots.js. It’s 
-// instead called by the onchange attribute of the dropdown menu in index.html
-
+// The following function is declared in plots.js, but it is never called in plots.js.
+// It's instead called by the onchange attribute of the dropdown menu in index.html
     // The argument name newSample refers to the value of the selected menu option. In 
     // index.html, onchange=optionChanged(this.value) passes the selected menu option’s 
     // value to the optionChanged() function. This function gives this information the 
     // argument name newSample. In other words, this.value and newSample are equivalent.
+
+// function optionDefault(default) {
+//   // console.log(newSample) replaced with the function calls to instead:
+//   // 1) populate the info panel
+//   // 2) visualise the data
+//   buildMetadata(940);
+//   buildCharts(940);
+// }
+
 
 function optionChanged(newSample) {
   // console.log(newSample) replaced with the function calls to instead:
@@ -58,17 +70,91 @@ function buildMetadata(sample) {
     PANEL.html("");
     // the append() and text() methods are chained to append a H6 heading to the panel 
     // and print the location of the volunteer to the panel, respectively
+    // PANEL.append("h6").text(result.location);
     
-    PANEL.append("h6").text(result.id);
-    PANEL.append("h6").text(result.ethnicity);
-    PANEL.append("h6").text(result.gender);
-    PANEL.append("h6").text(result.age);
-    PANEL.append("h6").text(result.location);
-    PANEL.append("h6").text(result.bbtype);
-    PANEL.append("h6").text(result.wfreq);
+    Object.entries(result).forEach(([key,value]) => {
+      PANEL.append("h6").text(key.toUpperCase() + ": " + value);
+    })
   });
-}
+};
 
-// SKILL DRILL
-// Above modify the buildMetadata() function to populate the Demographic Info panel with 
-// the rest of the demographic data when a menu option is selected (not just location)
+// when menu option selected, ID passed in as sample.
+function buildCharts(sample) {
+  function buildBarChart(sample) {
+    d3.json("samples.json").then((data) => {
+      var samples = data.samples;
+      var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
+      var result = resultArray[0];
+      sample_values = result.sample_values.slice(0,10).reverse();
+      otu = result.otu_ids.slice(0,10).reverse()
+      otu_ids = otu.map(x => `OTU ${x}`);
+      otu_labels = result.otu_labels.slice(0,10).reverse();
+      
+      // console.log(sample_values);
+      // console.log(otu_ids);
+      // console.log(otu_labels);
+
+      var trace = [{
+        x: sample_values,
+        y: otu_ids,
+        text: otu_labels,
+        type: 'bar',
+        orientation: 'h'
+      }];
+
+      var layout = {
+        title: 'Top 10 Bacterial Species (OTUs)',
+        xaxis: {
+          title: 'Values'
+        },
+        yaxis: {
+          title: 'Operational Taxonomic Unit IDs'
+        }
+      };
+
+      Plotly.newPlot("bar", trace, layout);
+    })
+  };
+
+  // function buildGuage(sample) {
+
+  // };
+  function buildBubbleChart(sample) {
+    d3.json("samples.json").then((data) => {
+      var samples = data.samples;
+      var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
+      var result = resultArray[0];
+      sample_values = result.sample_values;
+      otu_ids = result.otu_ids;
+      otu_labels = result.otu_labels;
+
+      var trace = [{
+        x: otu_ids,
+        y: sample_values,
+        text: otu_labels,
+        mode: 'markers',
+        marker: {
+          color: otu_ids,
+          size: sample_values
+        },
+        type: 'scatter'
+      }];
+
+      var layout = {
+        title: 'Present Bacterial Species/ Operational Taxonomic Unit (OTUs)',
+        xaxis: {
+          title: 'Values'
+        },
+        yaxis: {
+          title: 'Prevalence of OTUs'
+        }
+    };
+
+      Plotly.newPlot("bubble", trace, layout); 
+  });
+};
+
+  buildBarChart(sample);
+  // buildGuage(sample);
+  buildBubbleChart(sample);
+};
