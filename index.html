@@ -7,42 +7,65 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Bellybutton Biodiversity</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
 </head>
 
 <body style="background-image:url('images/polka-dot-pattern.png');">
-
+  <center>
   <div class="container">
     <div class="row">
-      <div class="col-md-12 jumbotron text-center" style="background-color:darkolivegreen; color:white">
+      <div class="col-md-12 jumbotron text-center" style="background-color:maroon; color:white">
         <h1>Belly Button Biodiversity Dashboard</h1>
         <p>Use the interactive charts below to explore the dataset</p>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2">
-        <div class="well">
-          <center><h5>Test Subject ID No.:</h5>
-          <!-- Creates html element: dropdown menu -->
-          <select id="selDataset" onchange="optionChanged(this.value)"></select></center>
-        </div>
-        <div class="panel panel-primary"></div>
-          <div class="panel-heading">
-            <h3 class="panel-title">Demographic Info</h3>
-          </div>
-          <!-- Creates html element: panel for demographic info -->
-          <div id="sample-metadata" class="panel-body"></div>
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div id="bar"></div>
-      </div>
-      <div class="col-md-5">
-        <div id="gauge"></div>
+    <div class="well" style="background-color:firebrick">
+      <div class="col-md-12" style="background-color:navajowhite; color:maroon">
+        <center><h3>Test Subject ID No.:</h3>
+        <!-- Creates html element: dropdown menu -->
+        <select id="selDataset" onchange="optionChanged(this.value)"></select></center>
       </div>
     </div>
+    <br>
+    <br>
+    <br>
+    <div class="row">     
+      <div class="col-lg-12"> 
+        <div class="col-sm-4" style="background-color:darksalmon; color:cornsilk">
+          <br>
+          <img src="images/belly-button-baby.jpg" alt="Belly Button Baby" style="width:150px;height:150px;">
+          <br>
+          <br>
+          <div class="panel panel-primary"; style="border-top:darksalmon" ></div>       
+            <!-- Creates html element: panel for demographic info -->
+            <div class="panel-heading">
+              <h2 class="panel-title" style="color:maroon"><b>Demographic Info</b></h2>
+            </div>          
+          <div id="sample-metadata" class="panel-body"></div>
+        </div>   
+        <div class="col-md-8">
+          <div id="bubble"></div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>    
     <div class="row">
-      <div class="col-md-12">
-        <div id="bubble"></div>
+      <div class="col-lg-12"> 
+        <div class="col-md-7">
+          <div id="gauge"></div>
+        </div>
+        <div class="col-md-5">
+          <div id="bar"></div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>
+    <br>
+
+    <div class="col-lg-12"> 
+      <div class="well" style="background-color:maroon"></center>
       </div>
     </div>
   </div>

@@ -32,13 +32,6 @@ function init() {
     // value to the optionChanged() function. This function gives this information the 
     // argument name newSample. In other words, this.value and newSample are equivalent.
 
-// function optionDefault(default) {
-//   // console.log(newSample) replaced with the function calls to instead:
-//   // 1) populate the info panel
-//   // 2) visualise the data
-//   buildMetadata(940);
-//   buildCharts(940);
-// }
 
 
 function optionChanged(newSample) {
@@ -99,7 +92,15 @@ function buildCharts(sample) {
         y: otu_ids,
         text: otu_labels,
         type: 'bar',
-        orientation: 'h'
+        orientation: 'h',
+        marker: {
+          color: 'coral',
+          opacity: 0.6,
+          line: {
+            color: 'indianred',
+            width: 1.5
+          }
+        }
       }];
 
       var layout = {
@@ -116,9 +117,51 @@ function buildCharts(sample) {
     })
   };
 
-  // function buildGuage(sample) {
+  function buildGauge(sample) {
+    d3.json("samples.json").then((data) => {
+      var metadata = data.metadata;
+      var resultArray = metadata.filter(sampleObj => sampleObj.id == sample)
+      var result = resultArray[0];
+      var wfreq = result.wfreq
+      // console.log(wfreq)
 
-  // };
+      var trace = [
+        {
+          type: "indicator",
+          mode: "gauge+number",
+          value: wfreq,
+          title: { text: "Belly Button Washing Frequency <br> Scrubs per Week", 
+                  font: {size: 16}},
+          gauge: {
+                axis: { range: [null, 9] },
+                bar: { color: "lightsalmon" },
+                bgcolor: "lightblue",
+                steps: [
+                  { range: [0, 1], color: "cornsilk"},
+                  { range: [1, 2], color: "blanchedalmond"},
+                  { range: [2, 3], color: "bisque"},
+                  { range: [3, 4], color: "navajowhite"},
+                  { range: [4, 5], color: "wheat"},
+                  { range: [5, 6], color: "burlywood"},
+                  { range: [6, 7], color: "peru"},
+                  { range: [7, 8], color: "saddlebrown"},
+                  { range: [8, 9], color: "maroon"},
+                ],
+              }
+            }
+          ];
+  
+      var layout = { 
+          width: 600, 
+          height: 450, 
+          margin: { t: 10, b: 10, l:10, r:10 }
+        };
+
+      Plotly.newPlot('gauge', trace, layout);
+    }
+    );
+  };
+
   function buildBubbleChart(sample) {
     d3.json("samples.json").then((data) => {
       var samples = data.samples;
@@ -155,6 +198,6 @@ function buildCharts(sample) {
 };
 
   buildBarChart(sample);
-  // buildGuage(sample);
+  buildGauge(sample);
   buildBubbleChart(sample);
 };
